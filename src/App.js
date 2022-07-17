@@ -1,21 +1,19 @@
-import { useState , useEffect } from 'react'
 import './App.css';
-import axios from 'axios'
-function App() {
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import CriticalPatients from './components/CriticalPatients';
 
-  const [data , setData] = useState('')
-  useEffect (() => {
-    setInterval(() => {
-      axios.get("http://192.168.0.111:5000/").then(res => {
-      const data = res.data
-      console.log(data)
-      setData(data)
-    })
-    }, 15000)
-  } , [])
+function App() {
   return (
     <div className="App">
-      <h1>Data from sensor mote: {data}</h1>
+      <BrowserRouter>
+        <h1>Patient Monitoring System</h1>
+        <Link to="/critical">Critcal Patients</Link>
+
+        <Routes>
+          <Route path="/critical" element={<CriticalPatients />} />
+        </Routes>
+
+      </BrowserRouter>
     </div>
   );
 }
