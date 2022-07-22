@@ -1,19 +1,29 @@
 import './App.css';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PeriodicPatients from './components/PeriodicPatients';
+import MidcriticalPatients from './components/MidcriticalPatients';
 import CriticalPatients from './components/CriticalPatients';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
+      <div class="background-image">
+      
       <BrowserRouter>
-        <h1>Patient Monitoring System</h1>
-        <Link to="/critical">Critcal Patients</Link>
+    
+        <Navbar />
+        
 
         <Routes>
+          <Route path="/periodic" element={<PeriodicPatients />} />
+          <Route path="/mid-critical" element={<MidcriticalPatients />} />
           <Route path="/critical" element={<CriticalPatients />} />
         </Routes>
 
       </BrowserRouter>
+    
+    </div>
     </div>
   );
 }
