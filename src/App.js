@@ -2,29 +2,17 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PeriodicPatients from './components/PeriodicPatients';
 import MidcriticalPatients from './components/MidcriticalPatients';
-import CriticalPatients from './components/CriticalPatients';
-import Navbar from './components/Navbar';
+import ICU from './components/ICU';
 
 function App() {
   return (
-    <div className="App">
-      <div class="background-image">
-      
       <BrowserRouter>
-    
-        <Navbar />
-        
-
         <Routes>
           <Route path="/periodic" element={<PeriodicPatients />} />
           <Route path="/mid-critical" element={<MidcriticalPatients />} />
-          <Route path="/critical" element={<CriticalPatients />} />
+          <Route path="/icu" element={<ICU />} />
         </Routes>
-
       </BrowserRouter>
-    
-    </div>
-    </div>
   );
 }
 
