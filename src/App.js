@@ -6,6 +6,7 @@ import PeriodicPatients from './components/PeriodicPatients';
 import MidcriticalPatients from './components/MidcriticalPatients';
 import ICU from './components/ICU/ICU';
 import PatientDetailsICU from './components/ICU/PatientDetailsICU';
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -37,7 +38,9 @@ function App() {
   return (
     <div className='App'>
       <BrowserRouter>
+      <Navbar/>
         <Routes>
+          
           <Route path="/periodic" element={<PeriodicPatients />} />
           <Route path="/mid-critical" element={<MidcriticalPatients />} />
           <Route path="/icu" element={<ICU data={criticalData}/>} />
