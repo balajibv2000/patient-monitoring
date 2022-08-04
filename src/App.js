@@ -13,8 +13,6 @@ function App() {
       <BrowserRouter>
     
         <Navbar />
-        
-
         <Routes>
           <Route path="/periodic" element={<PeriodicPatients />} />
           <Route path="/mid-critical" element={<MidcriticalPatients />} />
