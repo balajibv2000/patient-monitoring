@@ -9,15 +9,6 @@ import PatientDetailsICU from './components/ICU/PatientDetailsICU';
 import Navbar from './components/Navbar'
 
 function App() {
-<<<<<<< HEAD
-  return (
-    <div className="App">
-      <div class="background-image">
-      
-      <BrowserRouter>
-    
-        <Navbar />
-=======
 
   const [criticalData , setCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
 
@@ -47,15 +38,26 @@ function App() {
   return (
     <div className='App'>
       <BrowserRouter>
-      <Navbar/>
->>>>>>> 420857dfb588ad9048585a5d7972e05615c02674
-        <Routes>
-          
-          <Route path="/periodic" element={<PeriodicPatients />} />
-          <Route path="/mid-critical" element={<MidcriticalPatients />} />
-          <Route path="/icu" element={<ICU data={criticalData}/>} />
-          <Route path='/icu/:id' element={<PatientDetailsICU />} />
-        </Routes>
+      <div class="container-scroller">
+        <Navbar/>
+        <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card corona-gradient-card">
+               
+                </div>
+              </div>
+            </div>
+            <Routes>
+              <Route path="/periodic" element={<PeriodicPatients />} />
+              <Route path="/mid-critical" element={<MidcriticalPatients />} />
+              <Route path="/icu" element={<ICU data={criticalData}/>} />
+              <Route path='/icu/:id' element={<PatientDetailsICU />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
       </BrowserRouter>
     </div>
   );

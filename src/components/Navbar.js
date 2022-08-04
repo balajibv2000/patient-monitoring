@@ -2,9 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 function Navbar() {
   return (
-  <body>
-      <div class="container-scroller">
-
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
             <h3> Monitoring System </h3>
@@ -61,8 +58,6 @@ function Navbar() {
             </li>
           </ul>
         </nav>
-        </div>
-    </body>
   )
 }
 export default Navbar;
