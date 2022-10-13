@@ -2,15 +2,17 @@ import './App.css';
 import { useState , useEffect } from 'react'
 import axios from 'axios'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import PeriodicPatients from './components/PeriodicPatients';
-import MidcriticalPatients from './components/MidcriticalPatients';
 import ICU from './components/ICU/ICU';
+import Lab from './components/Lab/Lab';
 import PatientDetailsICU from './components/ICU/PatientDetailsICU';
 import Navbar from './components/Navbar'
+import SpecialWard from './components/SpecialWard/SpecialWard';
 
 function App() {
 
   const [criticalData , setCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
+  const [midCriticalData , setMidCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
+  const [periodicData , setPeriodicData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
 
   const getCriticalData = async () => {
       try{
@@ -25,14 +27,61 @@ function App() {
       }catch(err) {
           console.error(err.message)
       }
+    }
+
+  const getMidCriticalData = async () => {
+    try{
+        var res = await axios.get("http://192.168.0.111:5000/mid-critical")
+
+        res.data.sort(( a , b) => {
+            if ( a.pid < b.pid) return -1;
+            if ( a.pid > b.pid) return 1;
+            return 0;
+        })
+        setMidCriticalData(res.data)
+    }catch(err) {
+        console.error(err.message)
+    } 
+  }
+
+  const getPeriodiclData = async () => {
+    try{
+        var res = await axios.get("http://192.168.0.111:5000/periodic")
+
+        res.data.sort(( a , b) => {
+            if ( a.pid < b.pid) return -1;
+            if ( a.pid > b.pid) return 1;
+            return 0;
+        })
+        setPeriodicData(res.data)
+    }catch(err) {
+        console.error(err.message)
+    } 
   }
 
   useEffect (() => {
       getCriticalData()
+      getMidCriticalData()
+      getPeriodiclData()
+
       const criticalInterval = setInterval(() => {
         getCriticalData()
       } , 15000)
-      return () => clearInterval(criticalInterval)
+
+      const midCriticalInterval = setInterval(() => {
+        getMidCriticalData()
+      } , 30000)
+
+      const periodicInterval = setInterval(() => {
+        getPeriodiclData()
+      } , 200000)
+
+      return () => {
+        clearInterval(criticalInterval)
+        clearInterval(midCriticalInterval)
+        clearInterval(periodicInterval)
+      }
+
   } , [])
 
   return (
@@ -50,8 +99,8 @@ function App() {
               </div>
             </div>
             <Routes>
-              <Route path="/periodic" element={<PeriodicPatients />} />
-              <Route path="/mid-critical" element={<MidcriticalPatients />} />
+              <Route path="/lab" element={<Lab data={periodicData}/>} />
+              <Route path="/special-ward" element={<SpecialWard data={midCriticalData}/>} />
               <Route path="/icu" element={<ICU data={criticalData}/>} />
               <Route path='/icu/:id' element={<PatientDetailsICU />} />
             </Routes>
