@@ -2,7 +2,7 @@ import React from 'react'
 import {Line} from 'react-chartjs-2';
 import Chart from "chart.js/auto"
 
-function LineChart({ data , label , title}) {
+function LineChart({ data , label , title , color}) {
 
     const lineChartData = {
         labels: label,
@@ -12,7 +12,7 @@ function LineChart({ data , label , title}) {
             fill: false,
             lineTension: 0,
             backgroundColor: 'rgba(0,0,0,1)',
-            borderColor: 'rgba(75,192,192,1)',
+            borderColor: color,
             borderWidth: 2,
             data: data
           }

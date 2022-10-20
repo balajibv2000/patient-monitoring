@@ -2,8 +2,12 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useState , useEffect } from 'react'
 import axios from 'axios'
-import DetailsHeader from './DetailsHeader';
-import LineChart from './LineChart';
+import DetailsHeader from '../DetailsHeader';
+import LineChart from '../Charts/LineChart';
+import AreaChart from '../Charts/AreaChart';
+import BarChart from '../Charts/BarChart';
+
+const {REACT_APP_PROXY_SERVER_IP} = process.env
 
 function PatientDetailsICU( ) {
 
@@ -25,7 +29,7 @@ function PatientDetailsICU( ) {
         let bp = []
 
         try{
-            var res = await axios.get(`http://192.168.0.111:5000/critical/${id}`)
+            var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/critical/${id}`)
             console.log(res.data)
             let count = res.data.length - 1;
             for(const obj of res.data){
@@ -61,7 +65,7 @@ function PatientDetailsICU( ) {
 
     return (
       <div>
-        <div class="main-panel">
+        <div class="main-panel" style={{padding: 10}}>
           <div class="content-wrapper">
             <div class="page-header">
               <h3 class="page-title"> ICU Patient ID : {id} </h3>
@@ -75,18 +79,18 @@ function PatientDetailsICU( ) {
             <DetailsHeader data={currentData} />
             <div class="row">
               <div class="col-lg-6 grid-margin stretch-card">
-                <LineChart data={oxygen} label={label} title="Oxygen Levels" />
+                <LineChart data={oxygen} label={label} title="Oxygen Levels" color='rgba(75,192,192,1)'/>
               </div>
               <div class="col-lg-6 grid-margin stretch-card">
-                <LineChart data={temperature} label={label} title="Temperature" />
+                <BarChart data={temperature} label={label} title="Temperature" />
               </div>
             </div>
             <div class="row">
               <div class="col-lg-6 grid-margin stretch-card">
-                <LineChart data={pulseRate} label={label} title="Pulse Rate" />
+                <AreaChart data={pulseRate} label={label} title="Pulse Rate" />
               </div>
               <div class="col-lg-6 grid-margin stretch-card">
-                <LineChart data={bloodPressure} label={label} title="Blood Pressure" />
+                <LineChart data={bloodPressure} label={label} title="Blood Pressure" color='#FF1E1E'/>
               </div>
             </div>
           </div>

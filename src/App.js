@@ -7,16 +7,20 @@ import Lab from './components/Lab/Lab';
 import PatientDetailsICU from './components/ICU/PatientDetailsICU';
 import Navbar from './components/Navbar'
 import SpecialWard from './components/SpecialWard/SpecialWard';
+import PatientDetailsSW from './components/SpecialWard/PatientDetailsSW';
+import LabDetails from './components/Lab/LabDetails';
+
+const {REACT_APP_PROXY_SERVER_IP} = process.env
 
 function App() {
 
   const [criticalData , setCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
   const [midCriticalData , setMidCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
-  const [periodicData , setPeriodicData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
+  const [periodicData , setPeriodicData] = useState([{lid: 1 , temp: 34 , humidity: 50 , uv: 60 , pressure: 780 }])
 
   const getCriticalData = async () => {
       try{
-          var res = await axios.get("http://192.168.0.111:5000/critical")
+          var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/critical`)
 
           res.data.sort(( a , b) => {
               if ( a.pid < b.pid) return -1;
@@ -31,7 +35,7 @@ function App() {
 
   const getMidCriticalData = async () => {
     try{
-        var res = await axios.get("http://192.168.0.111:5000/mid-critical")
+        var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/mid-critical`)
 
         res.data.sort(( a , b) => {
             if ( a.pid < b.pid) return -1;
@@ -46,7 +50,7 @@ function App() {
 
   const getPeriodiclData = async () => {
     try{
-        var res = await axios.get("http://192.168.0.111:5000/periodic")
+        var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/periodic`)
 
         res.data.sort(( a , b) => {
             if ( a.pid < b.pid) return -1;
@@ -89,20 +93,18 @@ function App() {
       <BrowserRouter>
       <div class="container-scroller">
         <Navbar/>
-        <div class="main-panel">
+        <div class="main-panel" style={{padding: 10}}>
+          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center">
+            <h1 style={{fontFamily: 'Karla , sans-serif'}}>Hospital Managememnt System</h1>
+          </div>
         <div class="content-wrapper">
-            <div class="row">
-              <div class="col-12 grid-margin stretch-card">
-                <div class="card corona-gradient-card">
-               
-                </div>
-              </div>
-            </div>
             <Routes>
               <Route path="/lab" element={<Lab data={periodicData}/>} />
               <Route path="/special-ward" element={<SpecialWard data={midCriticalData}/>} />
               <Route path="/icu" element={<ICU data={criticalData}/>} />
               <Route path='/icu/:id' element={<PatientDetailsICU />} />
+              <Route path='/special-ward/:id' element={<PatientDetailsSW />} />
+              <Route path='/lab/:id' element={<LabDetails />} />
             </Routes>
           </div>
         </div>

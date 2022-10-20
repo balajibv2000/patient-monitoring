@@ -3,26 +3,18 @@ import { Link } from 'react-router-dom';
 function Navbar() {
   return (
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-            <h3> Monitoring System </h3>
-          </div>
-          <ul class="nav">
+         
+          <ul class="nav" style={{padding: 10}}>
             <li class="nav-item profile">
               <div class="profile-desc">
-
-
-                <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-                  <a href="#" class="dropdown-item preview-item">
-                    <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-settings text-primary"></i>
-                      </div>
-                    </div>
-
-                  </a>
-
-
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <span class="mdi mdi-account"></span>
                 </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">Admin</h5>
+                </div>
+              </div>
               </div>
             </li>
             <li class="nav-item nav-category">
@@ -30,8 +22,8 @@ function Navbar() {
             </li>
             <li class="nav-item menu-items">
               <a class="nav-link" href="/icu">
-                <span class="menu-icon">
-                  <i class="mdi mdi-speedometer"></i>
+                <span class="menu-icon ">
+                  <i class="mdi mdi-hospital"></i>
                 </span>
                 <span class="menu-title">ICU</span>
               </a>
@@ -41,7 +33,7 @@ function Navbar() {
             <li class="nav-item menu-items">
               <a class="nav-link" href="/special-ward">
                 <span class="menu-icon">
-                  <i class="mdi mdi-chart-bar"></i>
+                  <i class="mdi mdi-hospital-building"></i>
                 </span>
                 <span class="menu-title">Special ward</span>
               </a>
@@ -51,7 +43,7 @@ function Navbar() {
             <li class="nav-item menu-items">
               <a class="nav-link" href="/lab">
                 <span class="menu-icon">
-                  <i class="mdi mdi-file-document-box"></i>
+                  <i class="mdi mdi-flask-outline"></i>
                 </span>
                 <span class="menu-title">Lab</span>
               </a>
