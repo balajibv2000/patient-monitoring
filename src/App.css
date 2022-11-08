@@ -1,1 +1,9 @@
+.progress-bar{
+    margin-top: 100px;
+    background-color: #191c24;
+    height: 60px;
+}
 
+.progress-bar__progress-bg{
+    background-color: #B9FFF8 !important;
+}

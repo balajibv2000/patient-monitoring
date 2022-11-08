@@ -1,7 +1,7 @@
 import './App.css';
 import { useState , useEffect } from 'react'
-import axios from 'axios'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 import ICU from './components/ICU/ICU';
 import Lab from './components/Lab/Lab';
 import PatientDetailsICU from './components/ICU/PatientDetailsICU';
@@ -18,75 +18,41 @@ function App() {
   const [midCriticalData , setMidCriticalData] = useState([{pid: 1 , oxy: 90 , temp: 34 , pulse: 60 , bp: 130 }])
   const [periodicData , setPeriodicData] = useState([{lid: 1 , temp: 34 , humidity: 50 , uv: 60 , pressure: 780 }])
 
-  const getCriticalData = async () => {
-      try{
-          var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/critical`)
-
-          res.data.sort(( a , b) => {
-              if ( a.pid < b.pid) return -1;
-              if ( a.pid > b.pid) return 1;
-              return 0;
-          })
-          setCriticalData(res.data)
-      }catch(err) {
-          console.error(err.message)
-      }
-    }
-
-  const getMidCriticalData = async () => {
-    try{
-        var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/mid-critical`)
-
-        res.data.sort(( a , b) => {
-            if ( a.pid < b.pid) return -1;
-            if ( a.pid > b.pid) return 1;
-            return 0;
-        })
-        setMidCriticalData(res.data)
-    }catch(err) {
-        console.error(err.message)
-    } 
-  }
-
-  const getPeriodiclData = async () => {
-    try{
-        var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/periodic`)
-
-        res.data.sort(( a , b) => {
-            if ( a.pid < b.pid) return -1;
-            if ( a.pid > b.pid) return 1;
-            return 0;
-        })
-        setPeriodicData(res.data)
-    }catch(err) {
-        console.error(err.message)
-    } 
-  }
-
-  useEffect (() => {
-      getCriticalData()
-      getMidCriticalData()
-      getPeriodiclData()
-
-      const criticalInterval = setInterval(() => {
-        getCriticalData()
-      } , 15000)
-
-      const midCriticalInterval = setInterval(() => {
-        getMidCriticalData()
-      } , 30000)
-
-      const periodicInterval = setInterval(() => {
-        getPeriodiclData()
-      } , 200000)
-
-      return () => {
-        clearInterval(criticalInterval)
-        clearInterval(midCriticalInterval)
-        clearInterval(periodicInterval)
-      }
-
-  } , [])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchEventSource(`http://${REACT_APP_PROXY_SERVER_IP}:5000`, {
+  //       method: "GET",
+  //       headers: {
+  //         Accept: "text/event-stream",
+  //       },
+  //       onopen(res) {
+  //         if (res.ok && res.status === 200) {
+  //           console.log("Connection made ", res);
+  //         } else if (
+  //           res.status >= 400 &&
+  //           res.status < 500 &&
+  //           res.status !== 429
+  //         ) {
+  //           console.log("Client side error ", res);
+  //         }
+  //       },
+  //       onmessage(event) {
+  //         console.log(event.data);
+  //         var res = JSON.parse(event.data)
+  //         if(res.route === 'critical') setCriticalData(res.data)
+  //         if(res.route === 'mid-critical') setMidCriticalData(res.data)
+  //         if(res.route === 'periodic') setPeriodicData(res.data)
+  //       },
+  //       onclose() {
+  //         console.log("Connection closed by the server");
+  //       },
+  //       onerror(err) {
+  //         console.log("There was an error from server", err);
+  //       },
+  //     });
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <div className='App'>
@@ -95,10 +61,11 @@ function App() {
         <Navbar/>
         <div class="main-panel" style={{padding: 10}}>
           <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center">
-            <h1 style={{fontFamily: 'Karla , sans-serif'}}>Hospital Managememnt System</h1>
+            <h1 style={{fontFamily: 'Karla , sans-serif'}}>Hospital Management System</h1>
           </div>
         <div class="content-wrapper">
             <Routes>
+              <Route path="/" element={<div></div>} />
               <Route path="/lab" element={<Lab data={periodicData}/>} />
               <Route path="/special-ward" element={<SpecialWard data={midCriticalData}/>} />
               <Route path="/icu" element={<ICU data={criticalData}/>} />

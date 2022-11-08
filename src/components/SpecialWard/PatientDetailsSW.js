@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useState , useEffect } from 'react'
-import axios from 'axios'
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 import DetailsHeader from '../DetailsHeader';
 import LineChart from '../Charts/LineChart';
 import AreaChart from '../Charts/AreaChart';
@@ -21,18 +21,34 @@ function PatientDetailsSW( ) {
     const [bloodPressure , setBloodPressure] = useState([129 , 130 , 131 , 131, 132 ])
     const [label , setLabel] = useState([4 , 3 , 2 , 1 , 0])
 
-    const Chart = async () => {
-        let label = []
-        let oxy = []
-        let temp = []
-        let pulse = []
-        let bp = []
-
-        try{
-            var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/mid-critical/${id}`)
-            console.log(res.data)
-            let count = res.data.length - 1;
-            for(const obj of res.data){
+    useEffect(() => {
+      const fetchData = async () => {
+        await fetchEventSource(`http://${REACT_APP_PROXY_SERVER_IP}:5000/mid-critical/${id}`, {
+          method: "POST",
+          headers: {
+            Accept: "text/event-stream",
+          },
+          onopen(res) {
+            if (res.ok && res.status === 200) {
+              console.log("Connection made ", res);
+            } else if (
+              res.status >= 400 &&
+              res.status < 500 &&
+              res.status !== 429
+            ) {
+              console.log("Client side error ", res);
+            }
+          },
+          onmessage(event) {
+            let label = []
+            let oxy = []
+            let temp = []
+            let pulse = []
+            let bp = []
+            var res = JSON.parse(event.data)
+            console.log(res)
+            let count = res.length - 1;
+            for(const obj of res){
                 oxy.push(obj.oxy)
                 temp.push(obj.temp)
                 pulse.push(obj.pulse)
@@ -45,23 +61,19 @@ function PatientDetailsSW( ) {
             setPulseRate(pulse)
             setBloodPressure(bp)
             setLabel(label)
-            const curdata = res.data[res.data.length -1]
+            const curdata = res[res.length -1]
             setCurrentData(curdata)
-
-        }catch(err) {
-            console.error(err.message)
-        }
-    }
-
-    //console.log(lineChartData)
-
-    useEffect (() => {
-        Chart()
-        const criticalInterval = setInterval(() => {
-          Chart()
-        } , 15000)
-        return () => clearInterval(criticalInterval)
-    } , [ ])
+          },
+          onclose() {
+            console.log("Connection closed by the server");
+          },
+          onerror(err) {
+            console.log("There was an error from server", err);
+          },
+        });
+      };
+      fetchData();
+    }, []);
 
     return (
       <div>

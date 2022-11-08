@@ -3,7 +3,7 @@ import ReactLoading from 'react-loading';
 
 function ICU({data}) {
 
-    console.log(data.length)
+    //console.log(data.length)
 
    return (
 

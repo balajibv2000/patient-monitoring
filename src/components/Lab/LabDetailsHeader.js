@@ -2,6 +2,7 @@ import React from 'react'
 import CircularProgressbar from '../Charts/CircularProgressbar'
 import GuageMeter from '../Charts/GuageMeter'
 import Thermometer from '../Charts/Thermometer'
+import MeterBar from '../Charts/MeterBar'
 
 function DetailsHeader({ data }) {
   return (
@@ -72,6 +73,7 @@ function DetailsHeader({ data }) {
                 </div>
             </div>
             <h6 class="text-muted font-weight-normal">UV Raditation</h6>
+            <MeterBar data={data.uv} labels={[270,280,290,300,310,320,330,340,350]}/>
             </div>
         </div>
         </div>

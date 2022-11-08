@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useState , useEffect } from 'react'
-import axios from 'axios'
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 import LabDetailsHeader from './LabDetailsHeader'
 import LineChart from '../Charts/LineChart';
 import AreaChart from '../Charts/AreaChart';
@@ -21,16 +21,33 @@ function LabDetails( ) {
     const [pressure , setPressure] = useState([129 , 130 , 131 , 131, 132 ])
     const [label , setLabel] = useState([4 , 3 , 2 , 1 , 0])
 
-    const Chart = async () => {
-        let label = []
-        let hum = []
-        let temp = []
-        let uvr = []
-        let p = []
+    //console.log(lineChartData)
 
-        try{
-            var res = await axios.get(`http://${REACT_APP_PROXY_SERVER_IP}:5000/periodic/${id}`)
-            console.log(res.data)
+    useEffect(() => {
+      const fetchData = async () => {
+        await fetchEventSource(`http://${REACT_APP_PROXY_SERVER_IP}:5000/periodic/${id}`, {
+          method: "POST",
+          headers: {
+            Accept: "text/event-stream",
+          },
+          onopen(res) {
+            if (res.ok && res.status === 200) {
+              console.log("Connection made ", res);
+            } else if (
+              res.status >= 400 &&
+              res.status < 500 &&
+              res.status !== 429
+            ) {
+              console.log("Client side error ", res);
+            }
+          },
+          onmessage(event) {
+            let label = []
+            let hum = []
+            let temp = []
+            let uvr = []
+            let p = []
+            var res = JSON.parse(event.data)
             let count = res.data.length - 1;
             for(const obj of res.data){
                 hum.push(obj.humidity)
@@ -47,21 +64,17 @@ function LabDetails( ) {
             setLabel(label)
             const curdata = res.data[res.data.length -1]
             setCurrentData(curdata)
-
-        }catch(err) {
-            console.error(err.message)
-        }
-    }
-
-    //console.log(lineChartData)
-
-    useEffect (() => {
-        Chart()
-        const periodicInterval = setInterval(() => {
-          Chart()
-        } , 200000)
-        return () => clearInterval(periodicInterval)
-    } , [ ])
+          },
+          onclose() {
+            console.log("Connection closed by the server");
+          },
+          onerror(err) {
+            console.log("There was an error from server", err);
+          },
+        });
+      };
+      fetchData();
+    }, []);
 
     return (
       <div>

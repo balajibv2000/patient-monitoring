@@ -2,6 +2,7 @@ import React from 'react'
 import CircularProgressbar from './Charts/CircularProgressbar'
 import GuageMeter from './Charts/GuageMeter'
 import Thermometer from './Charts/Thermometer'
+import MeterBar from './Charts/MeterBar'
 
 function DetailsHeader({ data }) {
   return (
@@ -72,6 +73,9 @@ function DetailsHeader({ data }) {
                 </div>
             </div>
             <h6 class="text-muted font-weight-normal">Pulse Rate</h6>
+            <div class="justify-content-center mt-5">
+                <MeterBar data={data.pulse} labels={[0,10,20,30,40,50,60,70,80,90,100]}/>
+            </div>
             </div>
         </div>
         </div>
