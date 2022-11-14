@@ -9,6 +9,8 @@ import Navbar from './components/Navbar'
 import SpecialWard from './components/SpecialWard/SpecialWard';
 import PatientDetailsSW from './components/SpecialWard/PatientDetailsSW';
 import LabDetails from './components/Lab/LabDetails';
+import Home from './components/Home';
+import Documentation from './components/Documentation';
 
 const {REACT_APP_PROXY_SERVER_IP} = process.env
 
@@ -61,17 +63,18 @@ function App() {
         <Navbar/>
         <div class="main-panel" style={{padding: 10}}>
           <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center">
-            <h1 style={{fontFamily: 'Karla , sans-serif'}}>Hospital Management System</h1>
+            <h2 style={{fontFamily: 'Karla , sans-serif'}}>R I H M S</h2>
           </div>
         <div class="content-wrapper">
             <Routes>
-              <Route path="/" element={<div></div>} />
+              <Route path="/" element={<Home />} />
               <Route path="/lab" element={<Lab data={periodicData}/>} />
               <Route path="/special-ward" element={<SpecialWard data={midCriticalData}/>} />
               <Route path="/icu" element={<ICU data={criticalData}/>} />
               <Route path='/icu/:id' element={<PatientDetailsICU />} />
               <Route path='/special-ward/:id' element={<PatientDetailsSW />} />
               <Route path='/lab/:id' element={<LabDetails />} />
+              <Route path='/documentation' element={<Documentation/>} />
             </Routes>
           </div>
         </div>

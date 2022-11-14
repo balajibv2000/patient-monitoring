@@ -1,3 +1,9 @@
+.App{
+    height: 100%;
+}
+.container-scroller{
+    height: 100%;
+}
 .progress-bar{
     margin-top: 100px;
     background-color: #191c24;
@@ -6,4 +12,21 @@
 
 .progress-bar__progress-bg{
     background-color: #B9FFF8 !important;
+}
+
+.text-gradient{
+    line-height: 2;
+    font-size: 2.5em;
+    text-transform: uppercase;
+	background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+}
+
+.textLayer{
+    display: none;
+}
+.annotationLayer{
+    height: 10px !important;
 }
